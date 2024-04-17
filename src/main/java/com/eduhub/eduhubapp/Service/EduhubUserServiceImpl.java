@@ -56,6 +56,9 @@ public class EduhubUserServiceImpl implements EduhubUserService{
 	}
 	
 	public Integer checkIfUserExists(String emailId) {
+		if(eduhubUserDao.findByEmailId(emailId)==null) {
+			return 0;
+		}
 		Integer userId=eduhubUserDao.findByEmailId(emailId).getUserId();
 		return userId;
 	}
