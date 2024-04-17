@@ -21,7 +21,7 @@ import com.eduhub.eduhubapp.entity.EduhubUser;
 
 @CrossOrigin
 @RestController
-@RequestMapping("role")
+@RequestMapping("user")
 public class EduhubLoginController{
 	/*
 	@PostMapping("/oauth2")
@@ -44,13 +44,13 @@ public class EduhubLoginController{
 	@Autowired
 	EduhubUserServiceImpl userServiceImpl;
 	
-	@PostMapping("user/new")
+	@PostMapping("new")
 	public ResponseEntity<String> addNewUser(@RequestBody EduhubUser userDetails){
 		return userServiceImpl.addNewUser(userDetails);
 	}
 	
-	@GetMapping("user/details")
-	public ResponseEntity<EduhubUser> getUserDetails(@RequestBody EduhubUser userDetails){
-		return userServiceImpl.fetchUserDetails(userDetails);
+	@GetMapping("details")
+	public ResponseEntity<EduhubUser> getUserDetails(@RequestParam String emailId){
+		return userServiceImpl.fetchUserDetails(emailId);
 	}
 }

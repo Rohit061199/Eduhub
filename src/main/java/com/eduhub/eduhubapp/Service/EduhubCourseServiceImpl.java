@@ -327,9 +327,9 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	}
 	
 	@Override
-	public ResponseEntity<List<Question>> getAllQuestionsForQuiz(Quiz quizDets){
+	public ResponseEntity<List<Question>> getAllQuestionsForQuiz(Integer quizId){
 		try {
-			List<Question> questionList=questionDao.findByQuizId(quizDets.getQuizId());
+			List<Question> questionList=questionDao.findByQuizId(quizId);
 			return new ResponseEntity<>(questionList,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

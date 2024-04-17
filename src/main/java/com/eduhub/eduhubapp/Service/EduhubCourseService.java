@@ -24,7 +24,7 @@ public interface EduhubCourseService {
 	public ResponseEntity<String> createACourse(Course courseDetails);
 	ResponseEntity<String> enrollStudentToCourse(Enrollment enrollRequest);
 	ResponseEntity<String> addQuestionsToQuiz(List<Question> questionList);
-	ResponseEntity<List<Question>> getAllQuestionsForQuiz(Quiz quizDets);
+	ResponseEntity<List<Question>> getAllQuestionsForQuiz(Integer quizId);
 	ResponseEntity<Certificate> generateCertificate(Enrollment enrollCert);
 	ResponseEntity<List<Course>> viewAllCourses();
 	ResponseEntity<Course> viewCourse(Integer courseId);

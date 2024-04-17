@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eduhub.eduhubapp.Service.EduhubArticleServiceImpl;
@@ -34,7 +35,7 @@ public class EduhubArticleController {
 	}
 	
 	@GetMapping("viewArticle")
-	public ResponseEntity<Article> viewArticle(@RequestBody Article articleReq){
+	public ResponseEntity<Article> viewArticle(@RequestParam Article articleReq){
 		return articleServiceImpl.viewArticle(articleReq);
 		
 	}

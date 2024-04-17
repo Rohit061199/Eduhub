@@ -1,5 +1,6 @@
 package com.eduhub.eduhubapp.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eduhub.eduhubapp.DTO.EnrollInfoStudentDTO;
@@ -32,6 +34,12 @@ import com.eduhub.eduhubapp.entity.Quiz;
 public class EduhubCourseController {
 	
 	@Autowired
+	Enrollment enrollment;
+	
+	@Autowired
+	Quiz quiz;
+	
+	@Autowired
 	EduhubCourseServiceImpl eduhubCourseServiceImpl;
 	
 	@PostMapping("createCourse")
@@ -50,8 +58,8 @@ public class EduhubCourseController {
 	}
 	
 	@GetMapping("viewCourse")
-	public ResponseEntity<Course> viewCourse(@RequestBody Integer courseId){
-		return eduhubCourseServiceImpl.viewCourse(courseId);
+	public ResponseEntity<Course> viewCourse(@RequestParam String courseId){
+		return eduhubCourseServiceImpl.viewCourse(Integer.valueOf(courseId));
 	}
 	
 	@GetMapping("viewAllCourse")
@@ -65,38 +73,43 @@ public class EduhubCourseController {
 	}
 	
 	@GetMapping("certificateDetails")
-	public ResponseEntity<Certificate> generateCertificate(@RequestBody Enrollment enrollment){
+	public ResponseEntity<Certificate> generateCertificate(@RequestParam String userId,String courseId,String enrollmentDate,String score){
+		enrollment.setUserId(Integer.valueOf(userId));
+		enrollment.setCourseId(Integer.valueOf(courseId));
+		enrollment.setEnrollmentDate(LocalDate.parse(enrollmentDate));
+		enrollment.setScore(Float.valueOf(score));
 		return eduhubCourseServiceImpl.generateCertificate(enrollment);
 	}
 	
 	@GetMapping("generateStudentList")
-	public ResponseEntity<List<EnrollInfoStudentDTO>> generateStudentList(@RequestBody Course coursereq){
-		return eduhubCourseServiceImpl.generateStudentListForCourse(coursereq.getCourseId());
+	public ResponseEntity<List<EnrollInfoStudentDTO>> generateStudentList(@RequestParam String courseId){
+		return eduhubCourseServiceImpl.generateStudentListForCourse(Integer.valueOf(courseId));
 	}
 	
 	@GetMapping("getAllLessons")
-	public ResponseEntity<List<LessonDetailsDTO>> listOfLessonsForCourse(@RequestBody Map<Object,Object> lesson){
-		return eduhubCourseServiceImpl.getListOfLessonsForCourse((Integer)lesson.get("courseId"),(Integer)lesson.get("userId"));
+	public ResponseEntity<List<LessonDetailsDTO>> listOfLessonsForCourse(@RequestParam String courseId,@RequestParam String userId){
+		return eduhubCourseServiceImpl.getListOfLessonsForCourse(Integer.valueOf(courseId),Integer.valueOf(userId));
 	}
 	
 	@GetMapping("getLesson")
-	public ResponseEntity<LessonDetailsDTO> getLessonForCourse(@RequestBody Map<Object,Object> lessonReq){
-		return eduhubCourseServiceImpl.getLessonForCourse((Integer)lessonReq.get("lessonId"),(Integer) lessonReq.get("courseId"),(Integer)lessonReq.get("userId"));
+	public ResponseEntity<LessonDetailsDTO> getLessonForCourse(@RequestParam String lessonId,@RequestParam String courseId,@RequestParam String userId){
+		return eduhubCourseServiceImpl.getLessonForCourse(Integer.valueOf(lessonId),Integer.valueOf(courseId),Integer.valueOf(userId));
 	}
 	
 	@GetMapping("getQuizForLesson")
-	public ResponseEntity<Quiz> getQuizForLesson(@RequestBody Quiz quizReq){
-		return eduhubCourseServiceImpl.getQuizForLesson(quizReq.getQuizId(), quizReq.getLessonId());
+	public ResponseEntity<Quiz> getQuizForLesson(@RequestParam String quizId,@RequestParam String lessonId){
+		return eduhubCourseServiceImpl.getQuizForLesson(Integer.valueOf(quizId), Integer.valueOf(lessonId));
 	}
 	
 	@GetMapping("getAllQuizForLesson")
-	public ResponseEntity<Quiz> getAllQuizesForLesson(@RequestBody Lesson lessonDets){
+	public ResponseEntity<Quiz> getAllQuizesForLesson(@RequestParam Lesson lessonDets){
 		return eduhubCourseServiceImpl.getAllQuizesForLesson(lessonDets);
 	}
 	
 	@GetMapping("loadQuestionsForQuiz")
-	public ResponseEntity<List<Question>> loadQuestionsForQuiz(@RequestBody Quiz quizDets){
-		return eduhubCourseServiceImpl.getAllQuestionsForQuiz(quizDets);
+	public ResponseEntity<List<Question>> loadQuestionsForQuiz(@RequestParam String quizId){
+		//quiz.setQuizId(Integer.valueOf(quizId));
+		return eduhubCourseServiceImpl.getAllQuestionsForQuiz(Integer.valueOf(quizId));
 	}
 	
 	@PostMapping("createQuestions")

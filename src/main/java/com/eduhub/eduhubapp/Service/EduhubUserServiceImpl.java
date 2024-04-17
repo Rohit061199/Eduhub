@@ -36,11 +36,11 @@ public class EduhubUserServiceImpl implements EduhubUserService{
 	}
 
 	@Override
-	public ResponseEntity<EduhubUser> fetchUserDetails(EduhubUser eduhubUserReq) {
+	public ResponseEntity<EduhubUser> fetchUserDetails(String emailId) {
 		// TODO Auto-generated method stub
 		try {
 			
-			return new ResponseEntity<>(eduhubUserDao.findByEmailId(eduhubUserReq.getEmailId()),HttpStatus.OK);
+			return new ResponseEntity<>(eduhubUserDao.findByEmailId(emailId),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

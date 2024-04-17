@@ -9,6 +9,6 @@ import com.eduhub.eduhubapp.entity.EduhubUser;
 public interface EduhubUserService {
 	
 	public ResponseEntity<String> addNewUser(EduhubUser eduhubUserReq);
-	public ResponseEntity<EduhubUser> fetchUserDetails(EduhubUser eduhubUserReq);
+	public ResponseEntity<EduhubUser> fetchUserDetails(String emailId);
 
 }
