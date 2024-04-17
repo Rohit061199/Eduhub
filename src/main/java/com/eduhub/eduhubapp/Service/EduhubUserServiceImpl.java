@@ -38,7 +38,11 @@ public class EduhubUserServiceImpl implements EduhubUserService{
 		eduhubUser.setRole(eduhubUserReq.getRole());
 		try {
 			eduhubUserDao.save(eduhubUser);
-			return new ResponseEntity<>("Added user with userId "+eduhubUserDao.findByEmailId(eduhubUserReq.getEmailId()).getUserId(),HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("userId", eduhubUserDao.findByEmailId(eduhubUserReq.getEmailId()).getUserId());
+			Gson gson=new Gson();
+			String json=gson.toJson(ob);
+			return new ResponseEntity<>(json,HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("Error Adding user",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
