@@ -7,7 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.eduhub.eduhubapp.Dao.EduhubUserDao;
 import com.eduhub.eduhubapp.entity.EduhubUser;
+import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.*;
 @Service
 public class EduhubUserServiceImpl implements EduhubUserService{
 	
@@ -21,7 +26,12 @@ public class EduhubUserServiceImpl implements EduhubUserService{
 	public ResponseEntity<String> addNewUser(EduhubUser eduhubUserReq) {
 		// TODO Auto-generated method stub
 		if(checkIfUserExists(eduhubUserReq.getEmailId())!=0) {
-			return new ResponseEntity<>("User Exists with userId "+checkIfUserExists(eduhubUserReq.getEmailId()),HttpStatus.ALREADY_REPORTED);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("userId", checkIfUserExists(eduhubUserReq.getEmailId()));
+			ob.put("message", "user exists");
+			Gson gson=new Gson();
+			String json=gson.toJson(ob);
+			return new ResponseEntity<>(json,HttpStatus.ALREADY_REPORTED);
 		}
 		eduhubUser.setEmailId(eduhubUserReq.getEmailId());
 		eduhubUser.setName(eduhubUserReq.getName());
