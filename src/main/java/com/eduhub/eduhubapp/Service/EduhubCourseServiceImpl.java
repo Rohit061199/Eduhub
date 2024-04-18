@@ -193,10 +193,11 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		certificate.setCourseId(enrollCert.getCourseId());
 		certificate.setUserId(enrollCert.getUserId());
 		//add code to get courseName
+		Enrollment certEnroll=enrollmentDao.findByUserIdAndCourseId(enrollCert.getUserId(), enrollCert.getCourseId());
 		String courseName=courseDao.findByCourseId(enrollCert.getCourseId()).getTitle();
 		certificate.setCourseName(courseName);
-		certificate.setScore(enrollCert.getScore());
-		certificate.setCompletionDate(enrollCert.getCompletionDate());
+		certificate.setScore(certEnroll.getScore());
+		certificate.setCompletionDate(certEnroll.getCompletionDate());
 		certificate.setUserName(eduhubUserServiceImpl.fetchUserNameForCertificate(enrollCert.getUserId()));
 		try {
 			certificateDao.save(certificate);
@@ -363,9 +364,9 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	}
 	
 	@Override
-	public ResponseEntity<String> getAllQuizesForLesson(Lesson lessonDets){
+	public ResponseEntity<String> getAllQuizesForLesson(Integer lessonId){
 		try {
-			Quiz quizList=quizDao.findByLessonId(lessonDets.getLessonId());
+			Quiz quizList=quizDao.findByLessonId(lessonId);
 			Map<Object,Object> ob=new HashMap<>();
 			ob.put("quiz", quizList);
 			ob.put("messgae", "success");
@@ -486,7 +487,7 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		
 		finalScore=(points*1.0f/noOfQues)*100;
 		//System.out.println("pont/ques: "+(points/noOfQues));
-		
+		updateScoreInEnrollment(userId,quizId,finalScore);
 		submissionDao.insertSubmissionToDB(userId,quizId,finalScore);
 		Boolean checkCourseComplete=checkAndUpdateForCourseCompletion(quizId,userId,finalScore);
 		if(checkCourseComplete) updateCompletionStatusForEnrollment(quizId,userId,checkCourseComplete);
@@ -499,6 +500,14 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		return new ResponseEntity<>(new Gson().toJson(statusMap),HttpStatus.OK);
 	}
 	
+	private void updateScoreInEnrollment(Integer userId, Integer quizId, float finalScore) {
+		// TODO Auto-generated method stub
+		Integer lessonId=quizDao.findLessonIdByQuizId(quizId);
+		Integer courseId=lessonDao.findCourseIdByLessonId(lessonId);
+		enrollmentDao.updateScoreForEnrollment(userId, courseId, finalScore);
+		
+	}
+
 	private void updateCompletionStatusForEnrollment(Integer quizId, Integer userId, Boolean checkCourseComplete) {
 		// TODO Auto-generated method stub
 		Integer lessonId=quizDao.findLessonIdByQuizId(quizId);

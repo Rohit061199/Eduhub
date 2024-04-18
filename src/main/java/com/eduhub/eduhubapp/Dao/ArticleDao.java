@@ -15,7 +15,9 @@ public interface ArticleDao extends JpaRepository<Article,Integer>{
 
 	Article findByArticleId(Integer articleId);
 	
-	@Query("SELECT a FROM Article a where a.ownerId=:ownerId")
-	List<Article> findByOwnerId(Integer ownerId);
+	@Query("SELECT a FROM Article a where a.userId=:ownerId")
+	List<Article> findByUserId(Integer ownerId);
+
+	//List<Article> findByUserId(Integer userId);
 
 }

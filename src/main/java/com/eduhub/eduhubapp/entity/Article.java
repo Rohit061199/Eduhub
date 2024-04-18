@@ -16,7 +16,7 @@ public class Article {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer articleId;
-	private Integer ownerId;
+	private Integer userId;
 	private String title;
 	private String description;
 	private LocalDate publishedDate;
@@ -27,11 +27,11 @@ public class Article {
 	public void setArticleId(Integer articleId) {
 		this.articleId = articleId;
 	}
-	public Integer getOwnerId() {
-		return ownerId;
+	public Integer getUserId() {
+		return userId;
 	}
-	public void setOwnerId(Integer ownerId) {
-		this.ownerId = ownerId;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 	public String getTitle() {
 		return title;

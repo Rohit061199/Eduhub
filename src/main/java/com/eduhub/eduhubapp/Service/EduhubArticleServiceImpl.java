@@ -26,7 +26,7 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 	@Override
 	public ResponseEntity<String> createNewArticle(Article articleDetails) {
 		// TODO Auto-generated method stub
-		article.setOwnerId(articleDetails.getOwnerId());
+		article.setUserId(articleDetails.getUserId());
 		article.setDescription(articleDetails.getDescription());
 		article.setPublishedDate(articleDetails.getPublishedDate());
 		article.setTitle(articleDetails.getTitle());
@@ -96,17 +96,18 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 	}
 	
 	public ResponseEntity<String> getUserArticles(Integer userId){
-		List<Article> userArticleList=articleDao.findByOwnerId(userId);
+		List<Article> userArticleList=articleDao.findByUserId(userId);
+		//return new ResponseEntity<>(userArticleList,HttpStatus.OK);
 		List<Map<Object,Object>> responseArray=new ArrayList<>();
 		if(userArticleList!=null) {
 			for(Article userArticle:userArticleList) {
 				Map<Object,Object> resOb=new HashMap<>();
 				resOb.put("articleId",userArticle.getArticleId());
-				resOb.put("ownerId", userArticle.getOwnerId());
+				resOb.put("ownerId", userArticle.getUserId());
 				resOb.put("title", userArticle.getTitle());
 				resOb.put("description", userArticle.getDescription());
 				resOb.put("tags", userArticle.getTags());
-				resOb.put("publishedDate", userArticle.getPublishedDate());
+				resOb.put("publishedDate", userArticle.getPublishedDate().toString());
 				responseArray.add(resOb);
 			}
 			

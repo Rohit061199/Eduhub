@@ -33,7 +33,7 @@ public interface EduhubCourseService {
 	//ResponseEntity<List<LessonDetailsDTO>> getListOfLessonsForCourse(Integer courseId);
 	ResponseEntity<String> getLessonForCourse(Integer lessonId, Integer courseId,Integer userId);
 	ResponseEntity<String> getQuizForLesson(Integer quizId, Integer lessonId);
-	ResponseEntity<String> getAllQuizesForLesson(Lesson lessonDets);
+	ResponseEntity<String> getAllQuizesForLesson(Integer lessonId);
 	ResponseEntity<String> editCourse(Course courseEditReq);
 	ResponseEntity<String> editLesson(Lesson lessonEditReq);
 	ResponseEntity<String> getListOfLessonsForCourse(Integer courseId, Integer userId);

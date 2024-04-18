@@ -73,11 +73,11 @@ public class EduhubCourseController {
 	}
 	
 	@GetMapping("certificateDetails")
-	public ResponseEntity<String> generateCertificate(@RequestParam String userId,@RequestParam String courseId,@RequestParam String enrollmentDate,@RequestParam String score){
+	public ResponseEntity<String> generateCertificate(@RequestParam String userId,@RequestParam String courseId){
 		enrollment.setUserId(Integer.valueOf(userId));
 		enrollment.setCourseId(Integer.valueOf(courseId));
-		enrollment.setEnrollmentDate(LocalDate.parse(enrollmentDate));
-		enrollment.setScore(Float.valueOf(score));
+		/*enrollment.setEnrollmentDate(LocalDate.parse(enrollmentDate));
+		enrollment.setScore(Float.valueOf(score));*/
 		return eduhubCourseServiceImpl.generateCertificate(enrollment);
 	}
 	
@@ -102,8 +102,8 @@ public class EduhubCourseController {
 	}
 	
 	@GetMapping("getAllQuizForLesson")
-	public ResponseEntity<String> getAllQuizesForLesson(@RequestParam Lesson lessonDets){
-		return eduhubCourseServiceImpl.getAllQuizesForLesson(lessonDets);
+	public ResponseEntity<String> getAllQuizesForLesson(@RequestParam String lessonId){
+		return eduhubCourseServiceImpl.getAllQuizesForLesson(Integer.valueOf(lessonId));
 	}
 	
 	@GetMapping("loadQuestionsForQuiz")

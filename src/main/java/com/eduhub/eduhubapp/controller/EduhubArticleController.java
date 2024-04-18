@@ -42,12 +42,12 @@ public class EduhubArticleController {
 	
 	@PutMapping("editArticle")
 	public ResponseEntity<String> editArticle(@RequestBody Article articleEditReq){
-		return null;
+		return articleServiceImpl.editArticle(articleEditReq);
 	}
 	
 	@GetMapping("getMyArticle")
 	public ResponseEntity<String> getMyArticles(@RequestParam String userId){
-		return null;
+		return articleServiceImpl.getUserArticles(Integer.valueOf(userId));
 	}
 
 }
