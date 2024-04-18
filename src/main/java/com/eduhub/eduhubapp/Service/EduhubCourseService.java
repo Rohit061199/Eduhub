@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.eduhub.eduhubapp.DTO.EnrollInfoStudentDTO;
 import com.eduhub.eduhubapp.DTO.LessonDetailsDTO;
+import com.eduhub.eduhubapp.DTO.SubmissionRequestDTO;
 import com.eduhub.eduhubapp.entity.Certificate;
 import com.eduhub.eduhubapp.entity.Course;
 import com.eduhub.eduhubapp.entity.Enrollment;
@@ -24,17 +25,18 @@ public interface EduhubCourseService {
 	public ResponseEntity<String> createACourse(Course courseDetails);
 	ResponseEntity<String> enrollStudentToCourse(Enrollment enrollRequest);
 	ResponseEntity<String> addQuestionsToQuiz(List<Question> questionList);
-	ResponseEntity<List<Question>> getAllQuestionsForQuiz(Integer quizId);
-	ResponseEntity<Certificate> generateCertificate(Enrollment enrollCert);
-	ResponseEntity<List<Course>> viewAllCourses();
-	ResponseEntity<Course> viewCourse(Integer courseId);
-	ResponseEntity<List<EnrollInfoStudentDTO>> generateStudentListForCourse(Integer courseId);
+	ResponseEntity<String> getAllQuestionsForQuiz(Integer quizId);
+	ResponseEntity<String> generateCertificate(Enrollment enrollCert);
+	ResponseEntity<String> viewAllCourses();
+	ResponseEntity<String> viewCourse(Integer courseId);
+	ResponseEntity<String> generateStudentListForCourse(Integer courseId);
 	//ResponseEntity<List<LessonDetailsDTO>> getListOfLessonsForCourse(Integer courseId);
-	ResponseEntity<LessonDetailsDTO> getLessonForCourse(Integer lessonId, Integer courseId,Integer userId);
-	ResponseEntity<Quiz> getQuizForLesson(Integer quizId, Integer lessonId);
-	ResponseEntity<Quiz> getAllQuizesForLesson(Lesson lessonDets);
+	ResponseEntity<String> getLessonForCourse(Integer lessonId, Integer courseId,Integer userId);
+	ResponseEntity<String> getQuizForLesson(Integer quizId, Integer lessonId);
+	ResponseEntity<String> getAllQuizesForLesson(Lesson lessonDets);
 	ResponseEntity<String> editCourse(Course courseEditReq);
 	ResponseEntity<String> editLesson(Lesson lessonEditReq);
-	ResponseEntity<List<LessonDetailsDTO>> getListOfLessonsForCourse(Integer courseId, Integer userId);
+	ResponseEntity<String> getListOfLessonsForCourse(Integer courseId, Integer userId);
+	ResponseEntity<String> evaluateQuizSubmission(List<SubmissionRequestDTO> quizRequest);
 
 }

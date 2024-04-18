@@ -30,12 +30,12 @@ public class EduhubArticleController {
 	}
 	
 	@GetMapping("allArticles")
-	public ResponseEntity<List<Article>> viewAllArticles(){
+	public ResponseEntity<String> viewAllArticles(){
 		return articleServiceImpl.viewAllArticles();
 	}
 	
 	@GetMapping("viewArticle")
-	public ResponseEntity<Article> viewArticle(@RequestParam Article articleReq){
+	public ResponseEntity<String> viewArticle(@RequestParam Article articleReq){
 		return articleServiceImpl.viewArticle(articleReq);
 		
 	}

@@ -1,6 +1,8 @@
 package com.eduhub.eduhubapp.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.eduhub.eduhubapp.Dao.ArticleDao;
 import com.eduhub.eduhubapp.entity.Article;
+import com.google.gson.Gson;
 
 @Service
 public class EduhubArticleServiceImpl implements EduhubArticleService{
@@ -29,7 +32,12 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 		article.setTags(articleDetails.getTags());
 		try {
 			articleDao.save(article);
-			return new ResponseEntity<>("Created an article with Article ID "+articleDao.findByTitle(articleDetails.getTitle()).getArticleId(),HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("articleId",articleDao.findByTitle(articleDetails.getTitle()).getArticleId());
+			ob.put("message", "Created the article");
+			Gson gson=new Gson();
+			String json=gson.toJson(ob);
+			return new ResponseEntity<>(json,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("Error occured.Check logs",HttpStatus.INTERNAL_SERVER_ERROR);
@@ -38,18 +46,25 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 	}
 
 	@Override
-	public ResponseEntity<List<Article>> viewAllArticles() {
+	public ResponseEntity<String> viewAllArticles() {
 		// TODO Auto-generated method stub
-		return new ResponseEntity<>(articleDao.findAll(),HttpStatus.OK);
+		Map<Object,Object> ob=new HashMap<>();
+		ob.put("articleList",articleDao.findAll());
+		ob.put("message", "Fetched the articles");
+		Gson gson=new Gson();
+		String json=gson.toJson(ob);
+		return new ResponseEntity<>(json,HttpStatus.OK);
 		//return null;
 	}
 
 	@Override
-	public ResponseEntity<Article> viewArticle(Article articleReq) {
+	public ResponseEntity<String> viewArticle(Article articleReq) {
 		// TODO Auto-generated method stub
 		try {
 			Article fecthArticle=articleDao.findByArticleId(articleReq.getArticleId());
-			return new ResponseEntity<>(fecthArticle,HttpStatus.OK);
+			Gson gson=new Gson();
+			String json=gson.toJson(fecthArticle);
+			return new ResponseEntity<>(json,HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -70,7 +85,10 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 				articleFromDB.setTags(articleEditReq.getTags());
 			}
 			articleDao.save(articleFromDB);
-			return new ResponseEntity<>("Success",HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("message", "Success");
+			
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

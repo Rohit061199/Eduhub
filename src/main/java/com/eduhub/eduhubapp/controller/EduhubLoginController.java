@@ -50,7 +50,7 @@ public class EduhubLoginController{
 	}
 	
 	@GetMapping("details")
-	public ResponseEntity<EduhubUser> getUserDetails(@RequestParam String emailId){
+	public ResponseEntity<String> getUserDetails(@RequestParam String emailId){
 		return userServiceImpl.fetchUserDetails(emailId);
 	}
 }

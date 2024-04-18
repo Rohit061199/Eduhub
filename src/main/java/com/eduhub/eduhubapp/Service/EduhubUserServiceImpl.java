@@ -44,17 +44,17 @@ public class EduhubUserServiceImpl implements EduhubUserService{
 			String json=gson.toJson(ob);
 			return new ResponseEntity<>(json,HttpStatus.OK);
 		}catch(Exception e) {
-			return new ResponseEntity<>("Error Adding user",HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
 
 	@Override
-	public ResponseEntity<EduhubUser> fetchUserDetails(String emailId) {
+	public ResponseEntity<String> fetchUserDetails(String emailId) {
 		// TODO Auto-generated method stub
 		try {
 			
-			return new ResponseEntity<>(eduhubUserDao.findByEmailId(emailId),HttpStatus.OK);
+			return new ResponseEntity<>(new Gson().toJson(eduhubUserDao.findByEmailId(emailId)),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

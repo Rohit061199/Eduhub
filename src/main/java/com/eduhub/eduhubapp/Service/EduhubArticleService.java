@@ -11,8 +11,8 @@ import com.eduhub.eduhubapp.entity.Article;
 public interface EduhubArticleService {
 	
 	ResponseEntity<String> createNewArticle(Article articleDetails);
-	ResponseEntity<List<Article>> viewAllArticles();
-	ResponseEntity<Article> viewArticle(Article articleReq);
+	ResponseEntity<String> viewAllArticles();
+	ResponseEntity<String> viewArticle(Article articleReq);
 	ResponseEntity<String> editArticle(Article articleEditReq);
 
 }

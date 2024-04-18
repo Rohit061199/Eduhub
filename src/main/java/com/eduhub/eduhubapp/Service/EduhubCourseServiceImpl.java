@@ -30,6 +30,7 @@ import com.eduhub.eduhubapp.entity.Lesson;
 import com.eduhub.eduhubapp.entity.Question;
 import com.eduhub.eduhubapp.entity.Quiz;
 import com.eduhub.eduhubapp.entity.Submission;
+import com.google.gson.Gson;
 
 @Service
 public class EduhubCourseServiceImpl implements EduhubCourseService {
@@ -108,12 +109,13 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		quiz.setTitle(lessonToQuiz.getTitle());
 		try {
 			quizDao.save(quiz);
-			return new ResponseEntity<>("Created a quiz with quizId "
-			+quizDao.findByTitleAndLessonId(lessonToQuiz.getTitle(),lessonToQuiz.getLessonId()).getQuizId()
-			,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("quizId", quizDao.findByTitleAndLessonId(lessonToQuiz.getTitle(),lessonToQuiz.getLessonId()).getQuizId());
+			ob.put("message", "Created a quiz");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>("Failed to Create a quiz.Check Logs",HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
@@ -130,10 +132,13 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		try {
 			lessonDao.insertLessonDetails(lessonDetails.getCourseId(),lessonDetails.getTitle(),lessonDetails.getSubtitle(),lessonDetails.getImageUrl()
 					,lessonDetails.getDescription());
-			return new ResponseEntity<>("Created a lesson with lessonId "+lessonDao.findByTitle(lessonDetails.getTitle()).getLessonId(),HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("lessonId",lessonDao.findByTitle(lessonDetails.getTitle()).getLessonId());
+			ob.put("message", "Created a lesson with lessonId");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>("Failed to Create a Lesson.Check Logs",HttpStatus.INTERNAL_SERVER_ERROR); 
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
 		
 	}
@@ -150,10 +155,13 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		try{
 			courseDao.insertCourseDetails(courseDetails.getTitle(),courseDetails.getSubtitle(),courseDetails.getImageUrl(),courseDetails.getCoursePrice()
 					,courseDetails.getDescription(),courseDetails.getUserId());
-			return new ResponseEntity<>("Created a course with courseId "+courseDao.findByTitle(courseDetails.getTitle()).getCourseId(),HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("courseId", courseDao.findByTitle(courseDetails.getTitle()).getCourseId());
+			ob.put("message", "Created a course ");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>("Failed to Create a Course.Check Logs",HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
@@ -165,18 +173,19 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		enrollment.setEnrollmentDate(enrollRequest.getEnrollmentDate());
 		try {
 			enrollmentDao.enrollStudentToCourse(enrollRequest.getUserId(), enrollRequest.getCourseId(), enrollRequest.getEnrollmentDate());
-			return new ResponseEntity<>("Successfully Enrolled into the course with EnrollmentID: "+enrollmentDao.findByUserIdAndCourseId(enrollRequest.getUserId()
-					,enrollRequest.getCourseId()).getEnrollmentId()
-					,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("enrollmentId", enrollmentDao.findByUserIdAndCourseId(enrollRequest.getUserId(),enrollRequest.getCourseId()).getEnrollmentId());
+			ob.put("message", "Success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>("Failed to enroll.Check Logs",HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		//return null;
 	}
 	
 	@Override
-	public ResponseEntity<Certificate> generateCertificate(Enrollment enrollCert){
+	public ResponseEntity<String> generateCertificate(Enrollment enrollCert){
 		if(!checkForEnrollment(enrollCert.getCourseId(),enrollCert.getUserId())) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
@@ -194,7 +203,9 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 			certificate.setExternalCertificateId("Eduhub00"+
 			certificateDao.findByUserIdAndCourseId(enrollCert.getUserId(),enrollCert.getCourseId()).getInternalCertificateId());
 			certificateDao.save(certificate);
-			return new ResponseEntity<>(certificate,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("certificate", certificate);
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -202,20 +213,26 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	}
 	
 	@Override
-	public ResponseEntity<List<Course>> viewAllCourses(){
+	public ResponseEntity<String> viewAllCourses(){
 		try {
 			List<Course> courseList=courseDao.findAll();
-			return new ResponseEntity<>(courseList,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("courseList", courseList);
+			ob.put("message", "success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@Override
-	public ResponseEntity<Course> viewCourse(Integer courseId){
+	public ResponseEntity<String> viewCourse(Integer courseId){
 		try {
 			Course newCourse=courseDao.findByCourseId(courseId);
-			return new ResponseEntity<>(newCourse,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("course", newCourse);
+			ob.put("message", "success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -223,10 +240,13 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	}
 	
 	@Override
-	public ResponseEntity<List<EnrollInfoStudentDTO>> generateStudentListForCourse(Integer courseId){
+	public ResponseEntity<String> generateStudentListForCourse(Integer courseId){
 		try {
 			List<EnrollInfoStudentDTO> studentList=enrollmentDao.findListOfStudentsForCourse(courseId);
-			return new ResponseEntity<>(studentList,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("studentList", studentList);
+			ob.put("message", "success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -234,7 +254,7 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	}
 	
 	@Override
-	public ResponseEntity<List<LessonDetailsDTO>> getListOfLessonsForCourse(Integer courseId,Integer userId){
+	public ResponseEntity<String> getListOfLessonsForCourse(Integer courseId,Integer userId){
 		if(!checkForEnrollment(courseId,userId)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
@@ -260,14 +280,17 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 						,eachLesson.getCourseId(), eachLesson.getSubtitle(),eachLesson.getImageUrl(),quizScore);
 				listDetails.add(newDTO);
 			}
-			return new ResponseEntity<>(listDetails,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("lessonList", listDetails);
+			ob.put("message","success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(new ArrayList<LessonDetailsDTO>(),HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	@Override
-	public ResponseEntity<LessonDetailsDTO> getLessonForCourse(Integer lessonId,Integer courseId,Integer userId){
+	public ResponseEntity<String> getLessonForCourse(Integer lessonId,Integer courseId,Integer userId){
 		if(!checkForEnrollment(courseId,userId)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
@@ -289,7 +312,10 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 			}
 			LessonDetailsDTO newDTO=new LessonDetailsDTO(fetchedLesson.getTitle(), fetchedLesson.getDescription()
 					,fetchedLesson.getCourseId(), fetchedLesson.getSubtitle(),fetchedLesson.getImageUrl(),quizScore);
-			return new ResponseEntity<>(newDTO,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("lessonDetails", newDTO);
+			ob.put("message", "success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -305,10 +331,13 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	}
 
 	@Override
-	public ResponseEntity<Quiz> getQuizForLesson(Integer quizId,Integer lessonId){
+	public ResponseEntity<String> getQuizForLesson(Integer quizId,Integer lessonId){
 		try {
 			Quiz fecthedQuiz=quizDao.findByQuizIdAndLessonId(quizId,lessonId);
-			return new ResponseEntity<>(fecthedQuiz,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("quiz", fecthedQuiz);
+			ob.put("messgae", "success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -316,10 +345,13 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	}
 	
 	@Override
-	public ResponseEntity<Quiz> getAllQuizesForLesson(Lesson lessonDets){
+	public ResponseEntity<String> getAllQuizesForLesson(Lesson lessonDets){
 		try {
 			Quiz quizList=quizDao.findByLessonId(lessonDets.getLessonId());
-			return new ResponseEntity<>(quizList,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("quiz", quizList);
+			ob.put("messgae", "success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -327,10 +359,13 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	}
 	
 	@Override
-	public ResponseEntity<List<Question>> getAllQuestionsForQuiz(Integer quizId){
+	public ResponseEntity<String> getAllQuestionsForQuiz(Integer quizId){
 		try {
 			List<Question> questionList=questionDao.findByQuizId(quizId);
-			return new ResponseEntity<>(questionList,HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("questionList", questionList);
+			ob.put("message", "success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -346,9 +381,12 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 					//wait
 				}
 			}
-			return new ResponseEntity<>("Added Questions To Quiz",HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			//ob.put("questionList", questionList);
+			ob.put("message", "Added Questions To Quiz");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
-			return new ResponseEntity<>("Failed to add questions. Check Logs",HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -373,10 +411,12 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 			}
 			
 			courseDao.save(courseFromDB);
-			return new ResponseEntity<>("Success",HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("message", "Success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>("Failed. Check Logs",HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -401,14 +441,17 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 			}
 			
 			lessonDao.save(lessonFromDB);
-			return new ResponseEntity<>("Success",HttpStatus.OK);
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("message", "Success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>("Failed. Check Logs",HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
-	public ResponseEntity<Map<Object,Object>> evaluateQuizSubmission(List<SubmissionRequestDTO> quizRequest){
+	@Override
+	public ResponseEntity<String> evaluateQuizSubmission(List<SubmissionRequestDTO> quizRequest){
 		int points=0,noOfQues=0;
 		float finalScore;
 		Integer userId=quizRequest.get(0).getUserId();
@@ -435,7 +478,7 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		statusMap.put("quizScore", finalScore);
 		
 		
-		return new ResponseEntity<>(statusMap,HttpStatus.OK);
+		return new ResponseEntity<>(new Gson().toJson(statusMap),HttpStatus.OK);
 	}
 	
 	private void updateCompletionStatusForEnrollment(Integer quizId, Integer userId, Boolean checkCourseComplete) {
