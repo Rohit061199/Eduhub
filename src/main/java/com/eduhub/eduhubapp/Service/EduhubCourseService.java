@@ -38,5 +38,7 @@ public interface EduhubCourseService {
 	ResponseEntity<String> editLesson(Lesson lessonEditReq);
 	ResponseEntity<String> getListOfLessonsForCourse(Integer courseId, Integer userId);
 	ResponseEntity<String> evaluateQuizSubmission(List<SubmissionRequestDTO> quizRequest);
+	ResponseEntity<String> getCreatedCourses(Integer userId);
+	ResponseEntity<String> getEnrolledCourses(Integer userId);
 
 }

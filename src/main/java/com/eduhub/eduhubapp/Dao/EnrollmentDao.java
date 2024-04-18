@@ -33,5 +33,8 @@ public interface EnrollmentDao extends JpaRepository<Enrollment,Integer>{
 	@Modifying
 	@Query("UPDATE Enrollment SET isComplete=:checkCourseComplete, completionDate=:now WHERE courseId=:courseId and userId=:userId")
 	void updateCompletionForUser(Integer courseId, Integer userId, Boolean checkCourseComplete, LocalDate now);
+	
+	@Query("SELECT e FROM Enrollment e where e.userId=:userId")
+	List<Enrollment> findByUserId(Integer userId);
 
 }

@@ -28,4 +28,9 @@ public interface CourseDao extends JpaRepository<Course,Integer>{
 	@Query("INSERT INTO Course(title,subtitle,imageUrl,coursePrice,description,userId) VALUES "
 			+ "(:title,:subtitle,:imageUrl,:coursePrice,:description,:userId)")
 	void insertCourseDetails(String title,String subtitle,String imageUrl,Float coursePrice,String description,Integer userId);
+
+	//List<Course> findByUserId(Integer userId);
+	
+	@Query("SELECT c from Course c where c.userId=:userId")
+	List<Course> findByUserId(Integer userId);
 }

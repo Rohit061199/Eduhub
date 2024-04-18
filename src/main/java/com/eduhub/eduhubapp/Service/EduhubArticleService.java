@@ -12,7 +12,7 @@ public interface EduhubArticleService {
 	
 	ResponseEntity<String> createNewArticle(Article articleDetails);
 	ResponseEntity<String> viewAllArticles();
-	ResponseEntity<String> viewArticle(Article articleReq);
+	ResponseEntity<String> viewArticle(Integer articleId);
 	ResponseEntity<String> editArticle(Article articleEditReq);
 
 }

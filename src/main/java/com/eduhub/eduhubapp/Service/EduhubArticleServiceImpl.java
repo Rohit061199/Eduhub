@@ -1,5 +1,6 @@
 package com.eduhub.eduhubapp.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,10 +59,10 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 	}
 
 	@Override
-	public ResponseEntity<String> viewArticle(Article articleReq) {
+	public ResponseEntity<String> viewArticle(Integer articleId) {
 		// TODO Auto-generated method stub
 		try {
-			Article fecthArticle=articleDao.findByArticleId(articleReq.getArticleId());
+			Article fecthArticle=articleDao.findByArticleId(articleId);
 			Gson gson=new Gson();
 			String json=gson.toJson(fecthArticle);
 			return new ResponseEntity<>(json,HttpStatus.OK);
@@ -91,6 +92,33 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	public ResponseEntity<String> getUserArticles(Integer userId){
+		List<Article> userArticleList=articleDao.findByOwnerId(userId);
+		List<Map<Object,Object>> responseArray=new ArrayList<>();
+		if(userArticleList!=null) {
+			for(Article userArticle:userArticleList) {
+				Map<Object,Object> resOb=new HashMap<>();
+				resOb.put("articleId",userArticle.getArticleId());
+				resOb.put("ownerId", userArticle.getOwnerId());
+				resOb.put("title", userArticle.getTitle());
+				resOb.put("description", userArticle.getDescription());
+				resOb.put("tags", userArticle.getTags());
+				resOb.put("publishedDate", userArticle.getPublishedDate());
+				responseArray.add(resOb);
+			}
+			
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("articleList", responseArray);
+			ob.put("message", "success");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
+		}
+		else {
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("message","No articles found for user");
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.UNAUTHORIZED);
 		}
 	}
 

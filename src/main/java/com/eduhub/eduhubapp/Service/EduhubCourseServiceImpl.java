@@ -203,8 +203,14 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 			certificate.setExternalCertificateId("Eduhub00"+
 			certificateDao.findByUserIdAndCourseId(enrollCert.getUserId(),enrollCert.getCourseId()).getInternalCertificateId());
 			certificateDao.save(certificate);
+			Map<Object,Object> temp=new HashMap<>();
+			temp.put("certificateId", certificate.getExternalCertificateId());
+			temp.put("userName", certificate.getUserName());
+			temp.put("courseName", certificate.getCourseName());
+			temp.put("score", certificate.getScore());
+			temp.put("completionDate", certificate.getCompletionDate()+"");
 			Map<Object,Object> ob=new HashMap<>();
-			ob.put("certificate", certificate);
+			ob.put("certificate", temp);
 			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -243,8 +249,20 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 	public ResponseEntity<String> generateStudentListForCourse(Integer courseId){
 		try {
 			List<EnrollInfoStudentDTO> studentList=enrollmentDao.findListOfStudentsForCourse(courseId);
+			List<Map<Object,Object>> responseList=new ArrayList<>();
+			if(studentList!=null) {
+				
+				for(EnrollInfoStudentDTO student:studentList) {
+					Map<Object,Object> temp=new HashMap<>();
+					temp.put("userId", student.getUserId());
+					temp.put("courseId", student.getCourseId());
+					temp.put("userName", student.getUserName());
+					temp.put("enrolllmentDate", student.getEnrollmentDate().toString());
+					responseList.add(temp);
+				}
+			}
 			Map<Object,Object> ob=new HashMap<>();
-			ob.put("studentList", studentList);
+			ob.put("studentList", responseList);
 			ob.put("message", "success");
 			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
 		}catch(Exception e) {
@@ -504,6 +522,39 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		
 		String correctAnswer=questionDao.findCorrectAnswerByQuestionId(questionId);
 		return correctAnswer;
+	}
+	
+	@Override
+	public ResponseEntity<String> getCreatedCourses(Integer userId){
+		List<Course> createdCourseList=courseDao.findByUserId(userId);
+		if(createdCourseList!=null) {
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("courseList", createdCourseList);
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@Override
+	public ResponseEntity<String> getEnrolledCourses(Integer userId){
+		List<Enrollment> enrolledList=enrollmentDao.findByUserId(userId);
+		List<Map<Object,Object>> response=new ArrayList<>();
+		if(enrolledList!=null) {
+			for(Enrollment enroll:enrolledList) {
+				Map<Object,Object> temp=new HashMap<>();
+				temp.put("courseName", courseDao.findByCourseId(enroll.getCourseId()).getTitle());
+				temp.put("enrollmentDate", enroll.getEnrollmentDate().toString());
+				temp.put("completionDate", enroll.getCompletionDate()+"");
+				response.add(temp);
+			}
+			
+			Map<Object,Object> ob=new HashMap<>();
+			ob.put("courseList", response);
+			return new ResponseEntity<>(new Gson().toJson(ob),HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 

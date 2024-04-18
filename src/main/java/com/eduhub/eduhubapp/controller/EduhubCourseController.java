@@ -73,7 +73,7 @@ public class EduhubCourseController {
 	}
 	
 	@GetMapping("certificateDetails")
-	public ResponseEntity<String> generateCertificate(@RequestParam String userId,String courseId,String enrollmentDate,String score){
+	public ResponseEntity<String> generateCertificate(@RequestParam String userId,@RequestParam String courseId,@RequestParam String enrollmentDate,@RequestParam String score){
 		enrollment.setUserId(Integer.valueOf(userId));
 		enrollment.setCourseId(Integer.valueOf(courseId));
 		enrollment.setEnrollmentDate(LocalDate.parse(enrollmentDate));
@@ -130,6 +130,16 @@ public class EduhubCourseController {
 	@PostMapping("evaluateQuiz")
 	public ResponseEntity<String> quizEvaluateAndUpdate(@RequestBody List<SubmissionRequestDTO> quizRequest){
 		return eduhubCourseServiceImpl.evaluateQuizSubmission(quizRequest);
+	}
+	
+	@GetMapping("myCreatedCourses")
+	public ResponseEntity<String> getMyCreatedCourses(@RequestParam String userId){
+		return eduhubCourseServiceImpl.getCreatedCourses(Integer.valueOf(userId));
+	}
+	
+	@GetMapping("myEnrolledCourses")
+	public ResponseEntity<String> getMyEnrolledCourses(@RequestParam String userId){
+		return eduhubCourseServiceImpl.getEnrolledCourses(Integer.valueOf(userId));
 	}
 	
 	
