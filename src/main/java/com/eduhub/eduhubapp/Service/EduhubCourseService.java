@@ -31,7 +31,7 @@ public interface EduhubCourseService {
 	ResponseEntity<String> viewCourse(Integer courseId);
 	ResponseEntity<String> generateStudentListForCourse(Integer courseId);
 	//ResponseEntity<List<LessonDetailsDTO>> getListOfLessonsForCourse(Integer courseId);
-	ResponseEntity<String> getLessonForCourse(Integer lessonId, Integer courseId,Integer userId);
+	ResponseEntity<String> getLessonForCourse(Integer lessonId,Integer userId);
 	ResponseEntity<String> getQuizForLesson(Integer quizId, Integer lessonId);
 	ResponseEntity<String> getAllQuizesForLesson(Integer lessonId);
 	ResponseEntity<String> editCourse(Course courseEditReq);

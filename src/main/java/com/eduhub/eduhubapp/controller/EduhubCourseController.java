@@ -92,8 +92,8 @@ public class EduhubCourseController {
 	}
 	
 	@GetMapping("getLesson")
-	public ResponseEntity<String> getLessonForCourse(@RequestParam String lessonId,@RequestParam String courseId,@RequestParam String userId){
-		return eduhubCourseServiceImpl.getLessonForCourse(Integer.valueOf(lessonId),Integer.valueOf(courseId),Integer.valueOf(userId));
+	public ResponseEntity<String> getLessonForCourse(@RequestParam String lessonId,@RequestParam String userId){
+		return eduhubCourseServiceImpl.getLessonForCourse(Integer.valueOf(lessonId),Integer.valueOf(userId));
 	}
 	
 	@GetMapping("getQuizForLesson")

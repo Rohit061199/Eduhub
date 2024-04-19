@@ -20,7 +20,21 @@ public class Article {
 	private String title;
 	private String description;
 	private LocalDate publishedDate;
-	private String tags;
+	private String subtitle;
+	private String imageUrl;
+	public String getSubtitle() {
+		return subtitle;
+	}
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	//private String tags;
 	public Integer getArticleId() {
 		return articleId;
 	}
@@ -51,12 +65,12 @@ public class Article {
 	public void setPublishedDate(LocalDate publishedDate) {
 		this.publishedDate = publishedDate;
 	}
-	public String getTags() {
+	/*public String getTags() {
 		return tags;
 	}
 	public void setTags(String tags) {
 		this.tags = tags;
-	}
+	}*/
 	
 
 }

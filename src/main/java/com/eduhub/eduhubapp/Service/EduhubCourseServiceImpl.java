@@ -309,7 +309,8 @@ public class EduhubCourseServiceImpl implements EduhubCourseService {
 		}
 	}
 	@Override
-	public ResponseEntity<String> getLessonForCourse(Integer lessonId,Integer courseId,Integer userId){
+	public ResponseEntity<String> getLessonForCourse(Integer lessonId,Integer userId){
+		Integer courseId=lessonDao.findByLessonId(lessonId).getCourseId();
 		if(!checkForEnrollment(courseId,userId)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}

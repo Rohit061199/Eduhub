@@ -30,7 +30,9 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 		article.setDescription(articleDetails.getDescription());
 		article.setPublishedDate(articleDetails.getPublishedDate());
 		article.setTitle(articleDetails.getTitle());
-		article.setTags(articleDetails.getTags());
+		//article.setTags(articleDetails.getTags());
+		article.setSubtitle(articleDetails.getSubtitle());
+		article.setImageUrl(articleDetails.getImageUrl());
 		try {
 			articleDao.save(article);
 			Map<Object,Object> ob=new HashMap<>();
@@ -82,8 +84,14 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 			if(articleEditReq.getTitle()!=null) {
 				articleFromDB.setTitle(articleEditReq.getTitle());
 			}
-			if(articleEditReq.getTags()!=null) {
+			/*if(articleEditReq.getTags()!=null) {
 				articleFromDB.setTags(articleEditReq.getTags());
+			}*/
+			if(articleEditReq.getSubtitle()!=null) {
+				articleFromDB.setSubtitle(articleEditReq.getSubtitle());
+			}
+			if(articleEditReq.getImageUrl()!=null) {
+				articleFromDB.setImageUrl(articleEditReq.getImageUrl());
 			}
 			articleDao.save(articleFromDB);
 			Map<Object,Object> ob=new HashMap<>();
@@ -106,7 +114,9 @@ public class EduhubArticleServiceImpl implements EduhubArticleService{
 				resOb.put("ownerId", userArticle.getUserId());
 				resOb.put("title", userArticle.getTitle());
 				resOb.put("description", userArticle.getDescription());
-				resOb.put("tags", userArticle.getTags());
+				/*resOb.put("tags", userArticle.getTags());*/
+				resOb.put("subtitle", userArticle.getSubtitle());
+				resOb.put("imageUrl", userArticle.getImageUrl());
 				resOb.put("publishedDate", userArticle.getPublishedDate().toString());
 				responseArray.add(resOb);
 			}
